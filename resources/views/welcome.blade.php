@@ -157,7 +157,11 @@
                   
                 <hr> <!-- Línea divisoria entre usuarios -->
                 @endforeach
-                <button type="submit" class="btn btn-primary mt-2">Reservar regalos</button>
+
+                @if (setting('.reservar'))
+                    <button type="submit" class="btn btn-primary mt-2">Reservar regalos</button>
+                @endif
+                
             </form>
             </div>
         </div>
