@@ -29,6 +29,8 @@ class NavidadController extends Controller
             ->select()
             ->where('id_usuario', $userId) // Excluir al usuario actual
             ->get();
+
+           // return response(["data"=>$regalos]);
             $estado=2;
             $familia=self::obtenerRegalosDisponibles();
             $darregalos=self::obtenerlistaregalos();
@@ -45,7 +47,7 @@ class NavidadController extends Controller
     public function obtenerlistaregalos(){
         $userId = Auth::id();
         $reservas=DB::table("reservas")
-        ->select("regalos.nombre","regalos.descripcion","regalos.donde","users.name","reservas.id")
+        ->select("regalos.nombre","regalos.descripcion","regalos.donde","users.name","reservas.id","regalos.lugar","regalos.regalo")
         ->join("regalos","reservas.id_regalo","=","regalos.id")
         ->join("users","regalos.id_usuario","=","users.id")
         ->where("id_user",$userId)
@@ -58,7 +60,7 @@ class NavidadController extends Controller
     // Realizamos la consulta con un join y filtramos por estado 'disponible'
     $regalos = DB::table('regalos')
         ->join('users', 'regalos.id_usuario', '=', 'users.id') // Unimos ambas tablas
-        ->select('users.name as usuario', 'regalos.id', 'regalos.nombre', 'regalos.descripcion', 'regalos.estado','regalos.donde')
+        ->select('users.name as usuario', 'regalos.id', 'regalos.nombre', 'regalos.descripcion', 'regalos.estado','regalos.donde','regalos.lugar','regalos.regalo')
         ->where('regalos.estado', 'disponible') // Filtramos solo los regalos disponibles
         ->where('users.id',"!=", $userId) // Filtramos solo los regalos disponibles
         ->get();
@@ -191,6 +193,7 @@ class NavidadController extends Controller
         ->join("users", "regalos.id_usuario", "=", "users.id")
         ->where("reservas.id_user", $userId)
         ->get();
+        
 
     $pdf = Pdf::loadView('pdf.regalos', compact('darregalos'));
     return $pdf->download('carta-regalos.pdf');

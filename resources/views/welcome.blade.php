@@ -16,7 +16,7 @@
     <style>
         /* Fondo navideño */
         body {
-            background-image: url('https://image.slidesdocs.com/responsive-images/background/christmas-red-abstract-festival-bells-christmas-string-lights-powerpoint-background_565dfe2867__960_540.jpg');
+            background-image: url('https://img.freepik.com/premium-photo/christmas-frame-background-illustration_393744-1350.jpg');
             /* Cambia por tu URL */
             background-size: cover;
             background-repeat: no-repeat;
@@ -112,7 +112,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Nombre de regalo</th>
                             <th scope="col">Detalles</th>
-                            <th scope="col">Donde podria comprarlo</th>
+                           
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -121,8 +121,15 @@
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
                             <td>{{ $regalo->nombre}}</td>
-                            <td>{{ $regalo->descripcion }}</td>
-                            <td>{{ $regalo->donde }}</td>
+                            <td><button type="button" class="btn btn-info btn-sm btn-info-regalo"
+                                data-nombre="{{ $regalo->nombre }}" data-descripcion="{{ $regalo->descripcion }}"
+                                data-donde="{{ $regalo->donde }}"
+                                data-img-lugar="{{ asset('storage/'.$regalo->lugar) }}"
+                                data-img-regalo="{{ asset('storage/'.$regalo->regalo) }}">
+                                
+                                Expandir
+                            </button></td>
+                            
                             <td>
 
                                 @if ( setting('site.eliminanr'))
@@ -163,9 +170,22 @@
                             <input type="checkbox" class="form-check-input" id="regalo_{{ $regalo->id }}"
                                 name="regalos[]" value="{{ $regalo->id }}">
                             <label class="form-check-label" for="regalo_{{ $regalo->id }}">
-                                . {{ $regalo->nombre }} - {{ $regalo->descripcion }} - {{ $regalo->donde }}
+                                - {{ $regalo->nombre }}
                             </label>
+
+                            <!-- Botón info (NO activa el checkbox) -->
+                            <button type="button" class="btn btn-info btn-sm btn-info-regalo"
+                                data-nombre="{{ $regalo->nombre }}" data-descripcion="{{ $regalo->descripcion }}"
+                                data-donde="{{ $regalo->donde }}"
+                                data-img-lugar="{{ asset('storage/'.$regalo->lugar) }}"
+                                data-img-regalo="{{ asset('storage/'.$regalo->regalo) }}">
+                                
+                                Expandir
+                            </button>
                         </li>
+
+
+
                         @endforeach
                     </ul>
                     <!-- Botón de envío -->
@@ -173,7 +193,7 @@
                     <hr> <!-- Línea divisoria entre usuarios -->
                     @endforeach
 
-                    @if (setting('.reservar'))
+                    @if (setting('site.reservar'))
                     <button type="submit" class="btn btn-primary mt-2">Reservar regalos</button>
                     @endif
 
@@ -190,8 +210,7 @@
                             <th scope="col">Para</th>
                             <th scope="col">Regalo</th>
                             <th scope="col">Detalle</th>
-                            <th scope="col">Donde</th>
-                            <th scope="col">Cancelar</th>
+                            <th scope="col">Cancelar Regalo</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -199,11 +218,18 @@
                         <tr>
                             <th scope="row">{{$item->name}}</th>
                             <td>{{$item->nombre}}</td>
-                            <td>{{$item->descripcion}}</td>
-                            <td>{{$item->donde}}</td>
-                            <td> <a href="{{ route('cancelar.regalo', ['id' => $item->id]) }}" class="text-danger"
+                            <td><button type="button" class="btn btn-info btn-sm btn-info-regalo"
+                                data-nombre="{{ $item->nombre }}" data-descripcion="{{ $item->descripcion }}"
+                                data-donde="{{ $item->donde }}"
+                                data-img-lugar="{{ asset('storage/'.$item->lugar) }}"
+                                data-img-regalo="{{ asset('storage/'.$item->regalo) }}">
+                                
+                                Expandir
+                            </button></td>
+                          
+                            <td> <a href="{{ route('cancelar.regalo', ['id' => $item->id]) }}" class="btn btn-warning"
                                     title="Eliminar">
-                                    <i class="fas fa-trash-alt"></i>
+                                    Cancelar
                                 </a></td>
                         </tr>
                         @endforeach
@@ -221,7 +247,37 @@
 
     </div>
 
-    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- regalo -->
+
+    <div class="modal fade" id="modalRegalo" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content text-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitulo"></h5>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <p><b>Descripción:</b> <span id="modalDescripcion"></span></p>
+                <p><b>Dónde comprar:</b> <span id="modalDonde"></span></p>
+
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <p><b>Lugar</b></p>
+                        <img id="imgLugar" class="img-fluid rounded" alt="Lugar">
+                    </div>
+
+                    <div class="col-md-6 text-center">
+                        <p><b>Regalo</b></p>
+                        <img id="imgRegalo" class="img-fluid rounded" alt="Regalo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -259,12 +315,12 @@
                         <!-- Campo Donde -->
                         <div class="form-group">
                             <label for="donde">Foto del lugar</label>
-                            <input type="file" class="form-control" id="lugarfoto" name="lugarfoto" required>
+                            <input type="file" class="form-control" id="lugarfoto" name="lugarfoto" >
                         </div>
                         <!-- Campo Donde -->
                         <div class="form-group">
                             <label for="donde">Foto del regalo</label>
-                            <input type="file" class="form-control" id="regalofoto" name="regalofoto" required>
+                            <input type="file" class="form-control" id="regalofoto" name="regalofoto" >
                         </div>
 
 
@@ -289,6 +345,27 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Bootstrap 4 JS + Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+       $(document).on('click', '.btn-info-regalo', function (e) {
+    e.stopPropagation();
+
+    $('#modalTitulo').text($(this).data('nombre'));
+    $('#modalDescripcion').text($(this).data('descripcion'));
+    $('#modalDonde').text($(this).data('donde'));
+
+    $('#imgLugar').attr('src', $(this).data('img-lugar'));
+    $('#imgRegalo').attr('src', $(this).data('img-regalo'));
+
+
+    
+    $('#modalRegalo').modal('show');
+});
+    </script>
     <script>
         $(document).ready(function () {
         // Ocultar todos los divs al inicio
