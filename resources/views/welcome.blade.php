@@ -124,10 +124,16 @@
                             <td>{{ $regalo->descripcion }}</td>
                             <td>{{ $regalo->donde }}</td>
                             <td>
-                                <a href="{{ route('eliminar.regalo', $regalo->id) }}" class="btn btn-danger btn-sm"
+
+                                @if ( setting('site.eliminanr'))
+
+                                <a href="{{ route('eliminar.regalo', $regalo->id) }}" class="btn btn-warning btn-sm"
                                     onclick="return confirm('¿Seguro que deseas eliminar este regalo?')">
                                     Eliminar
                                 </a>
+                                @endif
+
+
                             </td>
                         </tr>
                         @endforeach
