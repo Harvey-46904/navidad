@@ -16,11 +16,13 @@
     <style>
         /* Fondo navideño */
         body {
-            background-image: url('https://image.slidesdocs.com/responsive-images/background/christmas-red-abstract-festival-bells-christmas-string-lights-powerpoint-background_565dfe2867__960_540.jpg'); /* Cambia por tu URL */
+            background-image: url('https://image.slidesdocs.com/responsive-images/background/christmas-red-abstract-festival-bells-christmas-string-lights-powerpoint-background_565dfe2867__960_540.jpg');
+            /* Cambia por tu URL */
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            min-height: 100vh; /* Ocupa toda la pantalla */
+            min-height: 100vh;
+            /* Ocupa toda la pantalla */
             margin: 0;
         }
 
@@ -28,11 +30,12 @@
         .content {
             text-align: center;
             color: white;
-           
+
             font-family: Arial, sans-serif;
             font-size: 1rem;
             text-shadow: 2px 2px 4px #000;
         }
+
         #nieve {
             position: fixed;
             top: 0;
@@ -42,10 +45,12 @@
             pointer-events: none;
             z-index: 10;
         }
+
         input[type="checkbox"] {
-  transform: scale(2); /* Escala el checkbox */
- /* Ajusta el espaciado si es necesario */
-}
+            transform: scale(2);
+            /* Escala el checkbox */
+            /* Ajusta el espaciado si es necesario */
+        }
     </style>
 </head>
 
@@ -61,7 +66,7 @@
                 <h1 class="display-4">Hola <b>{{ Auth::user()->name}}</b></h1>
             </div>
         </div>
-      
+
         @if ($estado==1)
         <div class="row" id="amigo_secreto">
             <div class="col-md-12 py-5">
@@ -108,7 +113,7 @@
                             <th scope="col">Nombre de regalo</th>
                             <th scope="col">Detalles</th>
                             <th scope="col">Donde podria comprarlo</th>
-                            
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -118,8 +123,12 @@
                             <td>{{ $regalo->nombre}}</td>
                             <td>{{ $regalo->descripcion }}</td>
                             <td>{{ $regalo->donde }}</td>
-                           
-
+                            <td>
+                                <a href="{{ route('eliminar.regalo', $regalo->id) }}" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Seguro que deseas eliminar este regalo?')">
+                                    Eliminar
+                                </a>
+                            </td>
                         </tr>
                         @endforeach
 
@@ -129,15 +138,15 @@
                 </table>
             </div>
         </div>
-       
+
         <div class="row" id="regalar" style="display: none; margin-top: 20px;">
             Tu familia quiere esto
             <div class="col-md-12">
-               
+
                 <form method="POST" action="{{route('regalos.reserva')}}">
-                @foreach ($familia as $usuario => $regalos)
-                <!-- Mostrar el nombre del usuario como encabezado -->
-                <h3 class="bg-success">{{ $usuario }}</h3>
+                    @foreach ($familia as $usuario => $regalos)
+                    <!-- Mostrar el nombre del usuario como encabezado -->
+                    <h3 class="bg-success">{{ $usuario }}</h3>
                     <!-- Agrega tu ruta en el action -->
                     @csrf
                     <!-- Token de seguridad para formularios en Laravel -->
@@ -148,24 +157,24 @@
                             <input type="checkbox" class="form-check-input" id="regalo_{{ $regalo->id }}"
                                 name="regalos[]" value="{{ $regalo->id }}">
                             <label class="form-check-label" for="regalo_{{ $regalo->id }}">
-                               .  {{ $regalo->nombre }} - {{ $regalo->descripcion }} - {{ $regalo->donde }}
+                                . {{ $regalo->nombre }} - {{ $regalo->descripcion }} - {{ $regalo->donde }}
                             </label>
                         </li>
                         @endforeach
                     </ul>
                     <!-- Botón de envío -->
-                  
-                <hr> <!-- Línea divisoria entre usuarios -->
-                @endforeach
 
-                @if (setting('.reservar'))
+                    <hr> <!-- Línea divisoria entre usuarios -->
+                    @endforeach
+
+                    @if (setting('.reservar'))
                     <button type="submit" class="btn btn-primary mt-2">Reservar regalos</button>
-                @endif
-                
-            </form>
+                    @endif
+
+                </form>
             </div>
         </div>
-     
+
         <div class="row" id="debodar" style="display: none; margin-top: 20px;">
             Carta de regalos que debes de comprar
             <div class="col-md-12">
@@ -196,7 +205,7 @@
                     </tbody>
 
                     <a href="{{ route('regalos.pdf') }}" class="btn btn-success mt-3">
-                       DECARGA LA CARTA NAVIDEÑA
+                        DECARGA LA CARTA NAVIDEÑA
                     </a>
                 </table>
             </div>
@@ -244,14 +253,12 @@
                         <!-- Campo Donde -->
                         <div class="form-group">
                             <label for="donde">Foto del lugar</label>
-                            <input type="file" class="form-control" id="lugarfoto" name="lugarfoto"
-                                required>
+                            <input type="file" class="form-control" id="lugarfoto" name="lugarfoto" required>
                         </div>
                         <!-- Campo Donde -->
                         <div class="form-group">
                             <label for="donde">Foto del regalo</label>
-                            <input type="file" class="form-control" id="regalofoto" name="regalofoto"
-                               required>
+                            <input type="file" class="form-control" id="regalofoto" name="regalofoto" required>
                         </div>
 
 
@@ -276,8 +283,8 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
- <script>
-    $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
         // Ocultar todos los divs al inicio
         $('#regalos, #regalar, #debodar').hide();
 
@@ -302,10 +309,10 @@
             $('#debodar').fadeIn(); // Mostrar con efecto fade
         });
     });
-</script>
+    </script>
 
-<script>
-    const canvas = document.getElementById("nieve");
+    <script>
+        const canvas = document.getElementById("nieve");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -352,7 +359,7 @@
     }
 
     animate();
-</script>
+    </script>
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
