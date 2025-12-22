@@ -16,7 +16,7 @@
     <style>
         /* Fondo navideño */
         body {
-            background-image: url('https://img.freepik.com/premium-photo/christmas-frame-background-illustration_393744-1350.jpg');
+            background-image: url('https://img.freepik.com/fotos-premium/imagens-de-estrelas-de-natal-felizes-colecoes-de-papeis-de-parede-bonitos-ai-gerados_643360-361958.jpg');
             /* Cambia por tu URL */
             background-size: cover;
             background-repeat: no-repeat;
@@ -112,7 +112,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Nombre de regalo</th>
                             <th scope="col">Detalles</th>
-                           
+
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -122,14 +122,14 @@
                             <th scope="row">{{ $loop->iteration }}</th>
                             <td>{{ $regalo->nombre}}</td>
                             <td><button type="button" class="btn btn-info btn-sm btn-info-regalo"
-                                data-nombre="{{ $regalo->nombre }}" data-descripcion="{{ $regalo->descripcion }}"
-                                data-donde="{{ $regalo->donde }}"
-                                data-img-lugar="{{ asset('storage/'.$regalo->lugar) }}"
-                                data-img-regalo="{{ asset('storage/'.$regalo->regalo) }}">
-                                
-                                Expandir
-                            </button></td>
-                            
+                                    data-nombre="{{ $regalo->nombre }}" data-descripcion="{{ $regalo->descripcion }}"
+                                    data-donde="{{ $regalo->donde }}"
+                                    data-img-lugar="{{ $regalo->lugar }}"
+                                    data-img-regalo="{{ $regalo->regalo }}">
+
+                                    Expandir
+                                </button></td>
+
                             <td>
 
                                 @if ( setting('site.eliminanr'))
@@ -177,9 +177,9 @@
                             <button type="button" class="btn btn-info btn-sm btn-info-regalo"
                                 data-nombre="{{ $regalo->nombre }}" data-descripcion="{{ $regalo->descripcion }}"
                                 data-donde="{{ $regalo->donde }}"
-                                data-img-lugar="{{ asset('storage/'.$regalo->lugar) }}"
-                                data-img-regalo="{{ asset('storage/'.$regalo->regalo) }}">
-                                
+                                data-img-lugar="{{ $regalo->lugar }}"
+                                data-img-regalo="{{ $regalo->regalo }}">
+
                                 Expandir
                             </button>
                         </li>
@@ -219,14 +219,15 @@
                             <th scope="row">{{$item->name}}</th>
                             <td>{{$item->nombre}}</td>
                             <td><button type="button" class="btn btn-info btn-sm btn-info-regalo"
-                                data-nombre="{{ $item->nombre }}" data-descripcion="{{ $item->descripcion }}"
-                                data-donde="{{ $item->donde }}"
-                                data-img-lugar="{{ asset('storage/'.$item->lugar) }}"
-                                data-img-regalo="{{ asset('storage/'.$item->regalo) }}">
-                                
-                                Expandir
-                            </button></td>
-                          
+                                    data-nombre="{{ $item->nombre }}" data-descripcion="{{ $item->descripcion }}"
+                                    data-donde="{{ $item->donde }}"
+                                    data-img-lugar="{{ $item->lugar }}"
+                                    data-img-regalo="{{ $item->regalo }}"
+                                   >
+
+                                    Expandir
+                                </button></td>
+
                             <td> <a href="{{ route('cancelar.regalo', ['id' => $item->id]) }}" class="btn btn-warning"
                                     title="Eliminar">
                                     Cancelar
@@ -251,32 +252,30 @@
     <!-- regalo -->
 
     <div class="modal fade" id="modalRegalo" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content text-dark">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalTitulo"></h5>
-                <button class="close" data-dismiss="modal">&times;</button>
-            </div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content text-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo"></h5>
+                    <button class="close" data-dismiss="modal">&times;</button>
+                </div>
 
-            <div class="modal-body">
-                <p><b>Descripción:</b> <span id="modalDescripcion"></span></p>
-                <p><b>Dónde comprar:</b> <span id="modalDonde"></span></p>
+                <div class="modal-body">
+                    <p><b>Descripción:</b> <span id="modalDescripcion"></span></p>
+                    <p><b>Dónde comprar:</b> <span id="modalDonde"></span></p>
 
-                <div class="row">
-                    <div class="col-md-6 text-center">
-                        <p><b>Lugar</b></p>
-                        <img id="imgLugar" class="img-fluid rounded" alt="Lugar">
-                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-center" id="contenedorLugar">
+                            <p><b>Lugar</b></p>
+                        </div>
 
-                    <div class="col-md-6 text-center">
-                        <p><b>Regalo</b></p>
-                        <img id="imgRegalo" class="img-fluid rounded" alt="Regalo">
+                        <div class="col-md-6 text-center" id="contenedorRegalo">
+                            <p><b>Regalo</b></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -315,12 +314,12 @@
                         <!-- Campo Donde -->
                         <div class="form-group">
                             <label for="donde">Foto del lugar</label>
-                            <input type="file" class="form-control" id="lugarfoto" name="lugarfoto" >
+                            <input type="file" class="form-control" id="lugarfoto" name="lugarfoto">
                         </div>
                         <!-- Campo Donde -->
                         <div class="form-group">
                             <label for="donde">Foto del regalo</label>
-                            <input type="file" class="form-control" id="regalofoto" name="regalofoto" >
+                            <input type="file" class="form-control" id="regalofoto" name="regalofoto">
                         </div>
 
 
@@ -351,21 +350,61 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-       $(document).on('click', '.btn-info-regalo', function (e) {
+$(document).on('click', '.btn-info-regalo', function (e) {
     e.stopPropagation();
 
     $('#modalTitulo').text($(this).data('nombre'));
     $('#modalDescripcion').text($(this).data('descripcion'));
     $('#modalDonde').text($(this).data('donde'));
 
-    $('#imgLugar').attr('src', $(this).data('img-lugar'));
-    $('#imgRegalo').attr('src', $(this).data('img-regalo'));
+    let lugar  = $(this).data('img-lugar');
+    let regalo = $(this).data('img-regalo');
 
+    $('#contenedorLugar .contenido').remove();
+    $('#contenedorRegalo .contenido').remove();
 
-    
+    // ---- LUGAR ----
+    if (!lugar) {
+        mostrarTexto('#contenedorLugar');
+    } else if (esVideo(lugar)) {
+        mostrarVideo('#contenedorLugar', lugar);
+    } else {
+        mostrarImagen('#contenedorLugar', lugar);
+    }
+
+    // ---- REGALO ----
+    if (!regalo) {
+        mostrarTexto('#contenedorRegalo');
+    } else {
+        mostrarImagen('#contenedorRegalo', regalo);
+    }
+
     $('#modalRegalo').modal('show');
 });
-    </script>
+
+function mostrarTexto(contenedor) {
+    $(contenedor).append('<p class="contenido text-muted">No información</p>');
+}
+
+function mostrarImagen(contenedor, archivo) {
+    $(contenedor).append(`
+        <img class="contenido img-fluid rounded"
+             src="/storage/${archivo}">
+    `);
+}
+
+function mostrarVideo(contenedor, archivo) {
+    $(contenedor).append(`
+        <video class="contenido img-fluid rounded" controls>
+            <source src="/storage/${archivo}">
+        </video>
+    `);
+}
+
+function esVideo(archivo) {
+    return /\.(mp4|webm|ogg)$/i.test(archivo);
+}
+</script>
     <script>
         $(document).ready(function () {
         // Ocultar todos los divs al inicio
